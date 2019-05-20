@@ -1,0 +1,92 @@
+local composer = require( "composer" )
+
+local scene = composer.newScene()
+local physics = require( "physics" )
+
+physics.start()
+physics.setGravity( 0, 25 )
+centerX = display.contentWidth * .5
+centerY = display.contentHeight * .5
+
+
+function scene:create( event )
+	local sceneGroup = self.view
+	-- Code here runs when the scene is first created but has not yet appeared on screen
+
+	physics.pause()  -- Temporarily pause the physics engine
+	backGroup = display.newGroup()  -- Display group for the background image
+	sceneGroup:insert( backGroup )  -- Insert into the scene's view group
+
+	mainGroup = display.newGroup()  
+	sceneGroup:insert( mainGroup )  -- Insert into the scene's view group
+	local theGround = display.newImageRect(backGroup,"land.png", 1024,128 )
+	theGround.x = display.contentCenterX
+	theGround.y = display.contentHeight 
+	theGround.id = "the ground"
+	physics.addBody( theGround, "static", {
+		friction = 0.5,
+		bounce = 0.3
+		} )
+	
+	local theGround2 = display.newImage( "land.png" )
+    theGround2.x = 1520
+    theGround2.y = display.contentHeight
+    theGround2.id = "the ground"
+    physics.addBody( theGround2, "static", { 
+    friction = 0.5, 
+    bounce = 0.3 
+	} )
+	
+
+end
+
+-- show()
+function scene:show( event )
+
+	local sceneGroup = self.view
+	local phase = event.phase
+
+	if ( phase == "will" ) then
+		-- Code here runs when the scene is still off screen (but is about to come on screen)
+
+	elseif ( phase == "did" ) then
+		-- Code here runs when the scene is entirely on screen
+		physics.start()
+		
+	end
+end
+-- hide()
+function scene:hide( event )
+
+	local sceneGroup = self.view
+	local phase = event.phase
+
+	if ( phase == "will" ) then
+		-- Code here runs when the scene is on screen (but is about to go off screen)
+
+	elseif ( phase == "did" ) then
+		-- Code here runs immediately after the scene goes entirely off screen
+		
+	end
+end
+
+
+-- destroy()
+function scene:destroy( event )
+
+	local sceneGroup = self.view
+	-- Code here runs prior to the removal of scene's view
+
+end
+
+
+-- -----------------------------------------------------------------------------------
+-- Scene event function listeners
+-- -----------------------------------------------------------------------------------
+scene:addEventListener( "create", scene )
+scene:addEventListener( "show", scene )
+scene:addEventListener( "hide", scene )
+scene:addEventListener( "destroy", scene )
+-- -----------------------------------------------------------------------------------
+
+return scene
